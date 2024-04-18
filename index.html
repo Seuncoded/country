@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid;
+            width: 70vw;
+        }
+
+        table {
+            margin: 50px auto;
+            border-collapse: collapse;
+            font-size: 18px;
+        }
+
+        th,
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="listCoat"></div>
+    <select name="" id="capitalName"></select><br /><br>
+
+    <span> Search country</span>:
+    <input type="text" id="searchInput" placeholder="Search Your Country">
+    <div id="result"> </div>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Country</th>
+                <th>Coat of Arms</th>
+                <th>Capital</th>
+                <th>TimeZone</th>
+                <th>Continents</th>
+                <th>Language</th>
+            </tr>
+        </thead>
+
+        <tbody id="tableBody">
+
+
+        </tbody>
+    </table>
+
+</body>
+
+</html>
+<script>
+    let listCoat = document.getElementById("listCoat")
+    let dispCoat = document.getElementById("capitalName")
+    let tableBody = document.getElementById("tableBody")
+
+    let allCountry = []
+    let alldata = []
+    fetch("https://restcountries.com/v3.1/all").then(result => result.json()).then(data => {
+        console.log(data);
+        alldata.push(data);
+
+
+        data.forEach((element, index) => {
+            allCountry.push(element.name.common);
+
+        });
+
+
+        showList()
+        ShowTable()
+
+    })
+
+
+
+
+    function showList() {
+        allCountry.sort().forEach(el => {
+            dispCoat.innerHTML += `
+                <option>${el}</option>`
+        });
+    }
+
+
+    function ShowTable() {
+
+        alldata[0].forEach((element, index) => {
+            tableBody.innerHTML += `
+                    <tr>
+                    <td>${index + 1}</td>
+                    <td>${element.name.common}</td>
+                    <td><img width="50" src="${element.coatOfArms.png}"/></td>
+                    <td>${element.capital}</td>
+                    <td>${element.timezones[0]}</td>
+                    <td>${element.continents[0]}</td>
+                    <td><img width="50" src="${element.flags.png}"/></td>
+                    </tr>
+                    `
+        })
+    }
+
+
+
+    function SearchCountry() {
+        let searchInput = document.getElementById('searchInput');
+        let resultsList = document.getElementById('results');
+
+        searchInput.addEventListener('input', el => {
+            let searchInput = el.target.value.toLowerCase();
+            console.log(searchInput);
+
+        })
+    }
+
+
+</script>
